@@ -37,7 +37,6 @@ typedef vector<string> vs;
 
 #define PB push_back
 #define MP make_pair
-#define MT make_tuple
 #define SZ size
 #define F first
 #define S second
@@ -50,9 +49,47 @@ typedef vector<string> vs;
 #define MAXE(v) max_element((v).begin(), (v).end())
 #define MINE(v) min_element((v).begin(), (v).end())
 
+pi dimensions(int area) {
+    REP(w, 3, 15) {
+        if (w * w <= area && area < (w + 1) * (w + 1)) {
+            if (w * (w + 1) < area) return MP(w, w + 2);
+            else if (w * w < area) return MP(w, w + 1);
+            else return MP(w, w);
+        }
+    }
+}
+
+pi best_sq(vector<vector<bool>> &orchard) {
+    int bestc = -1;
+    pi best = {0, 0};
+    REP(i, 1, orchard.SZ() - 1) {
+        REP(j, 1, orchard[i].SZ() - 1) {
+            int cnt = 0;
+            vpi nbrs = {{i, j}, {i - 1, j}, {i - 1, j - 1}, {i, j - 1}, {i + 1, j - 1}, {i + 1, j}, {i + 1, j + 1}, {i, j + 1}, {i - 1, j + 1}};
+            AREP(n, nbrs) {
+                if (!orchard[n.F][n.S]) ++cnt;
+            }
+            if (cnt > bestc) {
+                bestc = cnt; best = MP(i, j);
+            }
+        }
+    }
+    return best;
+}
+
 void do_test_case(int n_case) {
-    printf("Case #%d: ", n_case);
-    cout << ans << "\n";
+    int area; cin >> area;
+    int w, h; pi dims = dimensions(area); w = dims.F; h = dims.S;
+    vector<vector<bool>> orchard(w, vector<bool>(h, false));
+
+    while (true) {
+        pi sq = best_sq(orchard);
+        cout << sq.F + 1 << " " << sq.S + 1 << endl;
+        int inx, iny; cin >> inx >> iny;
+        if (inx == -1 && iny == -1) exit(1);
+        else if (inx == 0 && iny == 0) return;
+        else orchard[inx - 1][iny - 1] = true;
+    }
 }
 
 int main() {

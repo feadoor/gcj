@@ -15,7 +15,7 @@ typedef vector<string> vs;
 typedef pair<int, int> pi; typedef pair<uint, uint> pui;
 typedef pair<ll, ll> pll; typedef pair<ull, ull> pull;
 typedef pair<double, double> pd;
-typedef vector<pi> vpi; typedef vector<pui> vpui;
+typedef vector<pll> vpll; typedef vector<pui> vpui;
 typedef vector<pll> vpll; typedef vector<pull> vpull;
 typedef vector<pd> vpd;
 
@@ -36,9 +36,8 @@ typedef vector<string> vs;
 #define AREP(v, con) for (auto v : (con))
 
 #define PB push_back
-#define MP make_pair
-#define MT make_tuple
 #define SZ size
+#define MP make_pair
 #define F first
 #define S second
 #define LB lower_bound
@@ -50,9 +49,31 @@ typedef vector<string> vs;
 #define MAXE(v) max_element((v).begin(), (v).end())
 #define MINE(v) min_element((v).begin(), (v).end())
 
+int dmg(string &s) {
+    int d = 0, c = 1;
+    AREP(ch, s) {
+        if (ch == 'C') c *= 2;
+        else if (ch == 'S') d += c;
+    }
+    return d;
+}
+
 void do_test_case(int n_case) {
     printf("Case #%d: ", n_case);
-    cout << ans << "\n";
+
+    int d; string s; cin >> d >> s;
+    if (count(s.begin(), s.end(), 'S') > d) cout << "IMPOSSIBLE\n";
+    else {
+        int swaps = 0;
+        while (dmg(s) > d) {
+            RREP(i, 1, s.SZ()) {
+                if (s[i] == 'S' && s[i - 1] == 'C') {
+                    swap(s[i], s[i - 1]); ++swaps; break;
+                }
+            }
+        }
+        cout << swaps << "\n";
+    }
 }
 
 int main() {

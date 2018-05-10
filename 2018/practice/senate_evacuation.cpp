@@ -52,7 +52,7 @@ void do_test_case(int n_case) {
     printf("Case #%d: ", n_case);
 
     int nsens; cin >> nsens;
-    vector<pair<int, char>> sens(nsens);
+    vector<pair<int, char>> sens;
     char c = 'A';
     REP(i, 0, nsens) {
         int cnt; cin >> cnt;

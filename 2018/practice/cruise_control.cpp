@@ -49,7 +49,7 @@ void do_test_case(int n_case) {
     int dest, n_horses;
     cin >> dest >> n_horses;
 
-    vd times_taken(n_horses);
+    vd times_taken;
     REP(i, 0, n_horses) {
         double pos, speed;
         cin >> pos >> speed;

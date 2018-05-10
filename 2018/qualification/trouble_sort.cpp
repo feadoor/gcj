@@ -15,7 +15,7 @@ typedef vector<string> vs;
 typedef pair<int, int> pi; typedef pair<uint, uint> pui;
 typedef pair<ll, ll> pll; typedef pair<ull, ull> pull;
 typedef pair<double, double> pd;
-typedef vector<pi> vpi; typedef vector<pui> vpui;
+typedef vector<pll> vpll; typedef vector<pui> vpui;
 typedef vector<pll> vpll; typedef vector<pull> vpull;
 typedef vector<pd> vpd;
 
@@ -37,7 +37,6 @@ typedef vector<string> vs;
 
 #define PB push_back
 #define MP make_pair
-#define MT make_tuple
 #define SZ size
 #define F first
 #define S second
@@ -50,9 +49,29 @@ typedef vector<string> vs;
 #define MAXE(v) max_element((v).begin(), (v).end())
 #define MINE(v) min_element((v).begin(), (v).end())
 
+int first_error(vi &evens, vi &odds) {
+    SORT(odds); SORT(evens);
+    REP(i, 0, evens.SZ()) {
+        if (i < odds.SZ() && evens[i] > odds[i]) return 2 * i;
+        if (i > 0 && odds[i - 1] > evens[i]) return 2 * i - 1;
+    }
+    return -1;
+}
+
 void do_test_case(int n_case) {
     printf("Case #%d: ", n_case);
-    cout << ans << "\n";
+
+    int len; cin >> len;
+    vi odds, evens;
+    REP(i, 0, len) {
+        int num; cin >> num;
+        if (i & 1) odds.PB(num);
+        else evens.PB(num);
+    }
+
+    int error = first_error(evens, odds);
+    if (error == -1) cout << "OK\n";
+    else cout << error << "\n";
 }
 
 int main() {

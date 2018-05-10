@@ -51,11 +51,32 @@ typedef vector<string> vs;
 #define MINE(v) min_element((v).begin(), (v).end())
 
 void do_test_case(int n_case) {
-    printf("Case #%d: ", n_case);
-    cout << ans << "\n";
+    printf("Case #%d:\n", n_case);
+
+    double area; cin >> area;
+
+    double x = area / 3 - 1 * sqrt(1.0 / 6 - area * area / 18);
+    double y = area / 3 + 2 * sqrt(1.0 / 6 - area * area / 18);
+
+    double mat[3][3] = {
+        {(1 + y - x * x) / (1 + y), -x, (-1 * x * x) / (1 + y)},
+        {x, (1 + y - 2 * x * x) / (1 + y), x},
+        {(-1 * x * x) / (1 + y), -x, (1 + y - x * x) / (1 + y)}
+    };
+
+    double faces[3][3] = {
+        {mat[0][0] / 2, mat[1][0] / 2, mat[2][0] / 2},
+        {mat[0][1] / 2, mat[1][1] / 2, mat[2][1] / 2},
+        {mat[0][2] / 2, mat[1][2] / 2, mat[2][2] / 2},
+    };
+
+    cout << faces[0][0] << " " << faces[0][1] << " " << faces[0][2] << "\n";
+    cout << faces[1][0] << " " << faces[1][1] << " " << faces[1][2] << "\n";
+    cout << faces[2][0] << " " << faces[2][1] << " " << faces[2][2] << "\n";
 }
 
 int main() {
+    SETP(20);
     int cases; cin >> cases;
     INREP(n_case, 1, cases) {
         do_test_case(n_case);
