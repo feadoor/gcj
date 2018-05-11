@@ -51,9 +51,39 @@ typedef vector<string> vs;
 #define MAXE(v) max_element((v).begin(), (v).end())
 #define MINE(v) min_element((v).begin(), (v).end())
 
+struct cashier { ll m; ll s; ll p; };
+
+ll capacity(cashier csh, ll time) {
+    return max(0LL, min(csh.m, (time - csh.p) / csh.s));
+}
+
+bool can_do(ll robots, ll bits, vector<cashier> &cashiers, ll time) {
+    vi caps;
+    AREP(csh, cashiers) {
+        caps.PB(capacity(csh, time));
+    }
+    RSORT(caps);
+    return accumulate(caps.begin(), caps.begin() + min(robots, (ll)caps.SZ()), 0) >= bits;
+}
+
 void do_test_case(int n_case) {
     printf("Case #%d: ", n_case);
-    cout << ans << "\n";
+
+    ll robots, bits, n_cashiers;
+    cin >> robots >> bits >> n_cashiers;
+    vector<cashier> cashiers;
+    REP(i, 0, n_cashiers) {
+        cashier csh; cin >> csh.m >> csh.s >> csh.p;
+        cashiers.PB(csh);
+    }
+
+    ll time = -1, fstep = 1;
+    while (!can_do(robots, bits, cashiers, fstep)) fstep *= 2;
+    for (ll step = fstep; step >= 1; step /= 2) {
+        while (!can_do(robots, bits, cashiers, time + step)) time += step;
+    }
+
+    cout << time + 1 << "\n";
 }
 
 int main() {

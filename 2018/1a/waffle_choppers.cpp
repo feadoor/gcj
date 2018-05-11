@@ -53,7 +53,62 @@ typedef vector<string> vs;
 
 void do_test_case(int n_case) {
     printf("Case #%d: ", n_case);
-    cout << ans << "\n";
+
+    int w, h, ch, cv; cin >> w >> h >> ch >> cv;
+    vector<vb> chips(w, vb(h, false)); int tot_chips = 0;
+    REP(i, 0, w) {
+        string row; cin >> row;
+        REP(j, 0, h) {
+            chips[i][j] = row[j] == '@';
+            if (chips[i][j]) ++tot_chips;
+        }
+    }
+
+    vi hcuts(1, 0); int hsum = 0; int currh = 1;
+    REP(i, 0, w) {
+        REP(j, 0, h) {
+            if (chips[i][j]) ++hsum;
+        }
+        if (hsum * (ch + 1) == tot_chips * currh) {
+            hcuts.PB(i + 1);
+            ++currh;
+        }
+        if (currh > ch + 1) break;
+    }
+
+    vi vcuts(1, 0); int vsum = 0; int currv = 1;
+    REP(j, 0, h) {
+        REP(i, 0, w) {
+            if (chips[i][j]) ++vsum;
+        }
+        if (vsum * (cv + 1) == tot_chips * currv) {
+            vcuts.PB(j + 1);
+            ++currv;
+        }
+        if (currv > cv + 1) break;
+    }
+
+    if (hcuts.SZ() != (ch + 2) || vcuts.SZ() != (cv + 2)) {
+        cout << "IMPOSSIBLE" << "\n";
+        return;
+    }
+
+    REP(i, 0, ch + 1) {
+        REP(j, 0, cv + 1) {
+            int cnt = 0;
+            REP(x, hcuts[i], hcuts[i + 1]) {
+                REP(y, vcuts[j], vcuts[j + 1]) {
+                    if (chips[x][y]) ++cnt;
+                }
+            }
+            if (cnt * (ch + 1) * (cv + 1) != tot_chips) {
+                cout << "IMPOSSIBLE" << "\n";
+                return;
+            }
+        }
+    }
+
+    cout << "POSSIBLE" << "\n";
 }
 
 int main() {
