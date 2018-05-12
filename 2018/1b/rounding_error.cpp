@@ -20,8 +20,8 @@ typedef vector<pi> vpi; typedef vector<pui> vpui;
 typedef vector<pll> vpll; typedef vector<pull> vpull;
 typedef vector<pd> vpd;
 
-#define INF numeric_limits<int>::max()
-#define INFL numeric_limits<ll>::max()
+#define INF numeric_limits<int>::max();
+#define INFL numeric_limits<ll>::max();
 
 #define MMOD(x, m) ((x) < 0 ? (x) % (m) + (m) : (x) % (m))
 
@@ -55,6 +55,40 @@ typedef vector<pd> vpd;
 #define MINE(v) min_element((v).begin(), (v).end())
 
 void do_test_case() {
+    int n, l; cin >> n >> l;
+
+    vi ups;
+    INREP(x, 0, n) {
+        if ((100 * x) % n >= (n + 1) / 2) ups.PB(x);
+    }
+
+    vpi cnts(l); int tot = 0;
+    AREP(&p, cnts) {
+        cin >> p.S; tot += p.S;
+        auto lb = LB(ALL(ups), p.S);
+        p.F = lb < ups.end() ? (*lb) - p.S : INF;
+    }
+    SORT(cnts);
+
+    int incs = n - tot; int th = SZ(ups) ? ups[0] : INF;
+    AREP(&p, cnts) {
+        if (p.F <= th && p.F <= incs) {
+            incs -= p.F;
+            p.S += p.F;
+        } else break;
+    }
+
+    if (th <= incs) {
+        cnts.insert(cnts.end(), incs / th, MP(0, th));
+        incs %= th;
+    }
+    cnts.PB(MP(0, incs));
+
+    int ans = 0;
+    AREP(p, cnts) {
+        ans += (100 * p.S + n / 2) / n;
+    }
+
     cout << ans << "\n";
 }
 

@@ -54,8 +54,60 @@ typedef vector<pd> vpd;
 #define MAXE(v) max_element((v).begin(), (v).end())
 #define MINE(v) min_element((v).begin(), (v).end())
 
+int find_debt(vll &supplies) {
+    REP(i, 0, SZ(supplies)) {
+        if (supplies[i] < 0) return i;
+    }
+    return -1;
+}
+
+bool do_payoff(vector<vll> &recipes, vll &supplies, int idx) {
+    if (recipes[idx][idx] > 0) return false;
+
+    int sz = SZ(supplies);
+
+    REP(i, 0, sz) {
+        supplies[i] += recipes[idx][i] * supplies[idx];
+    }
+
+    AREP(&r, recipes) {
+        if (r[idx] > 0) {
+            REP(i, 0, sz) {
+                r[i] += recipes[idx][i] * r[idx];
+            }
+            r[idx] = 0;
+        }
+    }
+
+    supplies[idx] = 0; return true;
+}
+
+bool can_do(ll amt, vll supplies, vector<vll> recipes) {
+    supplies[0] -= amt; int idx;
+    while ((idx = find_debt(supplies)) != -1) {
+        if (!do_payoff(recipes, supplies, idx)) return false;
+    }
+    return true;
+}
+
+ll maximum_lead(vll &supplies, vector<vll> &recipes) {
+    ll amt = -1, fstep = 1;
+    while (can_do(fstep, supplies, recipes)) fstep *= 2;
+    for (ll step = fstep; step >= 1; step /= 2) {
+        while (can_do(amt + step, supplies, recipes)) amt += step;
+    }
+    return amt;
+}
+
 void do_test_case() {
-    cout << ans << "\n";
+    int sz; cin >> sz;
+    vll supplies(sz); vector<vll> recipes(sz, vector<ll>(sz));
+    REP(i, 0, sz) {
+        int a, b; cin >> a >> b;
+        recipes[i][a - 1] = recipes[i][b - 1] = 1;
+    }
+    AREP(&s, supplies) cin >> s;
+    cout << maximum_lead(supplies, recipes) << "\n";
 }
 
 int main() {

@@ -54,8 +54,38 @@ typedef vector<pd> vpd;
 #define MAXE(v) max_element((v).begin(), (v).end())
 #define MINE(v) min_element((v).begin(), (v).end())
 
+struct candidate { int curr; int other; int start; int eq; };
+
+void update_candidate(candidate &c, candidate &opp, int idx, int val) {
+    if (val == c.curr) ;
+    else if (val == opp.other) {
+        c.curr = opp.other; c.other = opp.curr; c.start = opp.start; c.eq = idx;
+    } else {
+        c.curr = val; c.other = opp.curr; c.start = opp.eq; c.eq = idx;
+    }
+}
+
 void do_test_case() {
-    cout << ans << "\n";
+    int n; cin >> n;
+    vpi sgns(n); AREP(&p, sgns) {
+        int s1, s2, s3; cin >> s1 >> s2 >> s3;
+        p.F = s1 + s2; p.S = s1 - s3;
+    }
+
+    int best = 0, best_c = 0;
+    candidate east = {INF, INF, 0, 0}; candidate west = {INF, INF, 0, 0};
+    REP(i, 0, n) {
+        candidate eastc = east;
+        update_candidate(east, west, i, sgns[i].F);
+        update_candidate(west, eastc, i, sgns[i].S);
+        int best_here = i - min(east.start, west.start) + 1;
+        if (best_here > best) {
+            best = best_here;
+            best_c = 0;
+        } if (best_here >= best) ++best_c;
+    }
+
+    cout << best << " " << best_c << "\n";
 }
 
 int main() {
