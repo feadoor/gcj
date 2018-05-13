@@ -59,7 +59,16 @@ typedef vector<pd> vpd;
 #define MINE(v) min_element((v).begin(), (v).end())
 
 void do_test_case() {
-    cout << ans << "\n";
+    int n; cin >> n;
+    vll dp(1, 0);
+    REP(i, 0, n) {
+        ll wgt; cin >> wgt;
+        if (dp.back() <= 6 * wgt) dp.PB(dp.back() + wgt);
+        RREPA(it, dp.begin(), UB(ALL(dp), 6 * wgt)) {
+            *(it + 1) = min(*(it + 1), (*it) + wgt);
+        }
+    }
+    cout << SZ(dp) - 1 << "\n";
 }
 
 int main() {

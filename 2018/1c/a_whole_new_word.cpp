@@ -59,6 +59,33 @@ typedef vector<pd> vpd;
 #define MINE(v) min_element((v).begin(), (v).end())
 
 void do_test_case() {
+    int n, l; cin >> n >> l;
+    unordered_map<string, int> cnts; vector<unordered_set<char>> chrs(l);
+    REP(i, 0, n) {
+        string word; cin >> word;
+        string prefix = ""; ++cnts[prefix];
+        REP(j, 0, SZ(word)) {
+            prefix += word[j]; ++cnts[prefix];
+            chrs[j].insert(word[j]);
+        }
+    }
+
+    ll cands = 1; AREP(v, chrs) cands *= SZ(v);
+    if (cands == cnts[""]) {
+        cout << "-\n"; return;
+    }
+
+    string ans = "";
+    REP(i, 0, l) {
+        cands /= SZ(chrs[i]);
+        AREP(c, chrs[i]) {
+            if (cnts[ans + c] < cands) {
+                ans += c;
+                break;
+            }
+        }
+    }
+
     cout << ans << "\n";
 }
 

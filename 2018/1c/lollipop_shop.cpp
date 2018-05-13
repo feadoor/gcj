@@ -59,13 +59,23 @@ typedef vector<pd> vpd;
 #define MINE(v) min_element((v).begin(), (v).end())
 
 void do_test_case() {
-    cout << ans << "\n";
+    int n; cin >> n;
+    vb sold(n, false); vi cnts(n, 0);
+    REP(i, 0, n) {
+        int d; cin >> d;
+        int bestf = -1;
+        REP(j, 0, d) {
+            int f; cin >> f; ++cnts[f];
+            if (!sold[f] && (bestf == -1 || cnts[f] < cnts[bestf])) bestf = f;
+        }
+        if (bestf > -1) sold[bestf] = true;
+        cout << bestf << endl;
+    }
 }
 
 int main() {
     int cases; cin >> cases;
     INREP(n_case, 1, cases) {
-        printf("Case #%d: ", n_case);
         do_test_case();
     }
 }
