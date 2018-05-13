@@ -20,6 +20,10 @@ typedef vector<pi> vpi; typedef vector<pui> vpui;
 typedef vector<pll> vpll; typedef vector<pull> vpull;
 typedef vector<pd> vpd;
 
+template <typename T> using vec = vector<T>;
+template <typename T, typename S> using umap = unordered_map<T, S>;
+template <typename T> using uset = unordered_set<T>;
+
 #define INF numeric_limits<int>::max()
 #define INFL numeric_limits<ll>::max()
 
