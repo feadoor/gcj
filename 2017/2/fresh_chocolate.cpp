@@ -28,6 +28,7 @@ template <typename T> using uset = unordered_set<T>;
 #define INFL numeric_limits<ll>::max()
 
 #define MMOD(x, m) ((x) < 0 ? (x) % (m) + (m) : (x) % (m))
+#define ABS(x) ((x) < 0 ? -(x) : (x))
 
 #define REP(i, a, b) for (int i = (a); i < (b); ++i)
 #define REPL(i, a, b) for (ll i = (a); i < (b); ++i)
@@ -62,8 +63,29 @@ template <typename T> using uset = unordered_set<T>;
 #define MAXE(v) max_element((v).begin(), (v).end())
 #define MINE(v) min_element((v).begin(), (v).end())
 
+int p2(int n) {
+    vi cnts(2, 0);
+    REP(i, 0, n) { int x; cin >> x; ++cnts[x % 2]; };
+    return cnts[0] + (cnts[1] + 1) / 2;
+}
+
+int p3(int n) {
+    vi cnts(3, 0);
+    REP(i, 0, n) { int x; cin >> x; ++cnts[x % 3]; };
+    return cnts[0] + min(cnts[1], cnts[2]) + (ABS(cnts[1] - cnts[2]) + 2) / 3;
+}
+
+int p4(int n) {
+    vi cnts(4, 0);
+    REP(i, 0, n) { int x; cin >> x; ++cnts[x % 4]; };
+    return cnts[0] + cnts[2] / 2 + min(cnts[1], cnts[3]) + (2 * (cnts[2] % 2) + ABS(cnts[1] - cnts[3]) + 3) / 4;
+}
+
 void do_test_case() {
-    cout << ans << "\n";
+    int p, n; cin >> n >> p;
+    if (p == 2) cout << p2(n) << "\n";
+    else if (p == 3) cout << p3(n) << "\n";
+    else if (p == 4) cout << p4(n) << "\n";
 }
 
 int main() {
