@@ -63,33 +63,47 @@ template <typename T> using uset = unordered_set<T>;
 #define MAXE(v) max_element((v).begin(), (v).end())
 #define MINE(v) min_element((v).begin(), (v).end())
 
+struct tournament {
+    string lineup;
+    int p; int r; int s;
+};
+
+vec<vec<tournament>> tournaments;
+
+tournament combine(tournament &t1, tournament &t2) {
+    return tournament {t1.lineup + t2.lineup, t1.p + t2.p, t1.r + t2.r, t1.s + t2.s};
+}
+
+void generate_tournaments(int rounds) {
+    vec<tournament> curr;
+    curr.PB(tournament {"P", 1, 0, 0});
+    curr.PB(tournament {"R", 0, 1, 0});
+    curr.PB(tournament {"S", 0, 0, 1});
+    tournaments.PB(curr);
+
+    REP(i, 0, rounds) {
+        vec<tournament> next;
+        next.PB(combine(curr[0], curr[1]));
+        next.PB(combine(curr[0], curr[2]));
+        next.PB(combine(curr[1], curr[2]));
+        tournaments.PB(next); curr = next;
+    }
+}
+
 void do_test_case() {
-    int seats, custs, m; cin >> seats >> custs >> m;
-    vi sc(seats, 0), cc(custs, 0);
-    REP(i, 0, m) {
-        int s, c; cin >> s >> c;
-        ++sc[s - 1]; ++cc[c - 1];
+    int n, r, p, s; cin >> n >> r >> p >> s;
+    AREP(t, tournaments[n]) {
+        if (t.p == p && t.r == r && t.s == s) {
+            cout << t.lineup << "\n";
+            return;
+        }
     }
-
-    int rides = 0; int cnt = 0;
-    REP(i, 0, SZ(sc)) {
-        cnt += sc[i];
-        rides = max(rides, (cnt + i) / (i + 1));
-    }
-    AREP(c, cc) {
-        rides = max(rides, c);
-    }
-
-    int proms = 0;
-    AREP(c, sc) {
-        if (c > rides) proms += c - rides;
-    }
-
-    cout << rides << " " << proms << "\n";
+    cout << "IMPOSSIBLE\n";
 }
 
 int main() {
     int cases; cin >> cases;
+    generate_tournaments(12);
     INREP(n_case, 1, cases) {
         printf("Case #%d: ", n_case);
         do_test_case();
