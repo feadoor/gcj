@@ -1,9 +1,16 @@
+#ifndef __SCL_STD_HEADER
+#define __SCL_STD_HEADER
+
 #include <bits/stdc++.h>
+#include <ext/pb_ds/assoc_container.hpp>
 
 using namespace std;
+using namespace __gnu_pbds;
 
 #define RESET_IS(is) (is).ignore(numeric_limits<streamsize>::max(), '\n')
+#define UNTIE() ios::sync_with_stdio(0); cin.tie(0)
 #define SETP(p) cout << setprecision(p)
+#define FIX_OS() cout << fixed
 
 typedef unsigned int uint;
 typedef long long ll; typedef unsigned long long ull;
@@ -23,6 +30,11 @@ typedef vector<pd> vpd;
 template <typename T> using vec = vector<T>;
 template <typename T, typename S> using umap = unordered_map<T, S>;
 template <typename T> using uset = unordered_set<T>;
+template <typename T> using mset = multiset<T>;
+template <typename T> using umset = unordered_multiset<T>;
+template <typename T> using pqueue = priority_queue<T>;
+
+typedef tree<int, null_type, less<int>, rb_tree_tag, tree_order_statistics_node_update> iset;
 
 #define INF numeric_limits<int>::max()
 #define INFL numeric_limits<ll>::max()
@@ -53,24 +65,29 @@ template <typename T> using uset = unordered_set<T>;
 #define S second
 #define LB lower_bound
 #define UB upper_bound
+#define EQR equal_range
 
 #define SZ(v) ((int) (v).size())
 #define ALL(v) (v).begin(), (v).end()
+#define RALL(v) (v).rbegin(), (v).rend()
 
-#define SORT(v) sort((v).begin(), (v).end())
-#define RSORT(v) sort((v).rbegin(), (v).rend())
+#define SORT(v) sort(ALL(v))
+#define RSORT(v) sort(RALL(v))
 
-#define MAXE(v) max_element((v).begin(), (v).end())
-#define MINE(v) min_element((v).begin(), (v).end())
+#define MAXE(v) max_element(ALL(v))
+#define MINE(v) min_element(ALL(v))
+
+#endif
 
 void do_test_case() {
     cout << ans << "\n";
 }
 
 int main() {
+    UNTIE();
     int cases; cin >> cases;
     INREP(n_case, 1, cases) {
-        printf("Case #%d: ", n_case);
+        cout << "Case #" << n_case << ": ";
         do_test_case();
     }
 }
